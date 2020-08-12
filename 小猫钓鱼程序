@@ -1,0 +1,184 @@
+import random
+import os
+
+def clear_window():
+    '''清屏用'''
+    os.system("cls")
+
+def make_pokers():
+    '''制作一副整齐的扑克牌'''
+    pokers0 = [] #pokers是一副整齐的扑克牌
+    poker_decors = ["\t\t\t\t[红桃", "\t\t\t\t[黑桃", "\t\t\t\t[方片", "\t\t\t\t[梅花"]
+    poker_numbers = ["A]", "2]", "3]", "4]", "5]", "6]", "7]", "8]", "9]", "10]", "J]", "Q]", "K]"]
+
+    for poker_number in range(13):
+        for poker_decor in range(4):    
+            poker0 = poker_decors[poker_decor] + poker_numbers[poker_number]
+            pokers0.append(poker0)
+    pokers0.append("\t\t\t\t[小王]")
+    pokers0.append("\t\t\t\t[大王]")
+    return pokers0
+
+def show_start_face():
+    '''显示初始界面'''
+    clear_window()
+    
+    adress[-2] = "选0:退出游戏 选1:开始游戏 选2:游戏说明".center(70)
+    adress[6] = "欢迎来玩小猫钓鱼".center(70)
+    for i in adress:
+        print(i) 
+    adress[-2] = ""
+    adress[6] = ""
+
+def show_game_description():
+    '''显示游戏说明界面'''
+    clear_window()
+    
+    adress[-2] = "选0:退出游戏 选1:返回菜单 选2:开始游戏".center(70)
+    adress[6] = "欢迎来玩小猫钓鱼 ".center(70)
+    adress[7] = "玩家和电脑各分一半的牌，然后玩家放1张牌在桌面上，电脑也放一张，"
+    adress[8] = "如果和之前放下的某张跟牌一样，即可把当中的牌全部吃掉（包含相同的那两张）"
+    adress[9] = "然后继续放牌，直至一方手上无牌为止，没有手牌的人/电脑输掉游戏"
+    for i in adress:
+        print(i)
+    adress[-2] = ""
+    adress[6] = ""
+    adress[7] = ""
+    adress[8] = ""
+    adress[9] = "" 
+
+def show_playing_face():
+    '''显示游戏界面'''
+    clear_window()
+    
+    adress[-2] = "选0将退出游戏 选1将从牌堆顶抽牌 选2将从牌堆底抽牌 选3将洗牌".center(70)
+    adress[-3] = "玩家还剩{0}张\t\t\t电脑还剩{1}张".format(len(player_pokers), len(computer_pokers)).center(70)
+    for i in adress:
+        print(i)
+
+def playing():
+    global adress
+    global player_pokers
+    global computer_pokers
+    numbers = []
+    show_playing_face()
+    i = 0
+    while (len(player_pokers) != 0) and (len(computer_pokers) != 0):
+        post = int(input("玩家回合，请选择（0/1/2/3）"))
+        if post == 0:
+            break
+        elif (post == 1) or (post == 2):
+            i += 1
+            if post == 1:
+                adress[i] = player_pokers.pop(0)
+            elif post == 2:
+                adress[i] = player_pokers.pop(-1)
+            show_playing_face()
+            n_ull = int(input("按任意键后按回车继续"))
+    
+            poker_size = pokers0.index(adress[i])//4 + 1
+            '''poker_size表示扑克牌的大小'''
+            if poker_size == 11:
+                numbers.append(poker_size)
+                player_pokers.extend(adress[1:i + 1])
+                del numbers[:]
+                for aaa in range(1, i + 1):
+                    adress[aaa] = ""
+                i = 0
+            elif poker_size in numbers: 
+                numbers.append(poker_size)
+                num = numbers.index(poker_size)
+                '''num是重复时的位置减1'''
+                player_pokers.extend(adress[num + 1:i + 1])
+                del numbers[num:]
+                for aaa in range(num + 1, i + 1):
+                    adress[aaa] = ""
+                i = num
+            else:
+                numbers.append(poker_size)
+            
+            show_playing_face()
+            n_ull = int(input("按任意键后按回车电脑开始放牌"))
+            '''电脑回合'''
+            i += 1
+            adress[i] = computer_pokers.pop(0)
+            show_playing_face()
+            n_ull = int(input("按任意键后按回车继续"))
+            poker_size = pokers0.index(adress[i])//4 + 1
+            '''poker_size表示扑克牌的大小'''
+            if poker_size == 11:
+                numbers.append(poker_size)
+                computer_pokers.extend(adress[1:i + 1])
+                del numbers[:]
+                for aaa in range(1, i + 1):
+                    adress[aaa] = ""
+                i = 0
+            elif poker_size in numbers: 
+                numbers.append(poker_size)
+                num = numbers.index(poker_size)
+                '''num是重复时的位置减1'''
+                computer_pokers.extend(adress[num + 1:i + 1])
+                del numbers[num:]
+                for aaa in range(num + 1, i + 1):
+                    adress[aaa] = ""
+                i = num
+            else:
+                numbers.append(poker_size)
+            
+
+            show_playing_face()
+        elif post == 3:
+            random.shuffle(player_pokers)
+            show_playing_face()
+        else:
+            show_playing_face()
+            post = int(input("输入错误，请重新输入"))
+
+if __name__ == "__main__":
+    adress0 = ["*******************************欢迎来玩小猫钓鱼*******************************\n\n", 
+        "", "", "", "", "", "", "", "", "", "", "", "", "", "",  
+                "\n*******************************欢迎来玩小猫钓鱼*******************************", 
+                "", "", "*******************************欢迎来玩小猫钓鱼*******************************"]
+    adress = adress0[:]
+
+    pokers0 = make_pokers()
+    pokers = pokers0[:]
+    random.shuffle(pokers)
+    player_pokers = pokers[:27]
+    computer_pokers = pokers[-27:]
+
+    str1 = "请选择（0/1/2）".center(70)
+    sign = True
+    while True:
+        if sign:
+            show_start_face()
+            post = int(input(str1))
+        if post == 0:
+            break
+        elif post == 1:
+            playing()
+            break
+        elif post == 2:
+            show_game_description()
+            post = int(input(str1))
+            if post == 0:
+                break
+            elif post == 1:
+                sign = True
+                continue
+            elif post == 2:
+                playing()
+                break
+            else:
+                sign = False
+                str1 = "输入错误，请重新输入（0/1/2）".center(70)
+                post = 2
+        else:
+            str1 = "输入错误，请重新输入（0/1/2）".center(70)
+
+    if len(player_pokers) == 0:
+        print("游戏结束，你输了".center(70))
+    elif len(computer_pokers) == 0:
+        print("游戏结束，你赢了".center(70))
+    else:
+        print(("游戏结束".center(70) + "\n\n") * 5)
