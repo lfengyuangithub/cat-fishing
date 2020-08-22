@@ -1,5 +1,13 @@
+#小猫钓鱼游戏（纸牌）
+'''
+1.还可以增加回放功能
+2.将没有吃牌的步骤省略
+3.
+'''
+
 import random
 import os
+import time
 
 def clear_window():
     '''清屏用'''
@@ -51,8 +59,8 @@ def show_playing_face():
     '''显示游戏界面'''
     clear_window()
     
-    adress[-2] = "选0将退出游戏 选1将从牌堆顶抽牌 选2将从牌堆底抽牌 选3将洗牌".center(70)
-    adress[-3] = "玩家还剩{0}张\t\t\t电脑还剩{1}张".format(len(player_pokers), len(computer_pokers)).center(70)
+    adress[-2] = "\t选0将退出游戏 选1将从牌堆顶抽牌 选2将从牌堆底抽牌 选3将洗牌"
+    adress[-3] = "\t\t玩家还剩{0}张\t\t\t电脑还剩{1}张".format(len(player_pokers), len(computer_pokers))
     for i in adress:
         print(i)
 
@@ -64,7 +72,7 @@ def playing():
     show_playing_face()
     i = 0
     while (len(player_pokers) != 0) and (len(computer_pokers) != 0):
-        post = int(input("玩家回合，请选择（0/1/2/3）"))
+        post = int(input("玩家回合，请选择（0/1/2/3）".center(70).rstrip()))
         if post == 0:
             break
         elif (post == 1) or (post == 2):
@@ -73,12 +81,17 @@ def playing():
                 adress[i] = player_pokers.pop(0)
             elif post == 2:
                 adress[i] = player_pokers.pop(-1)
+
             show_playing_face()
-            n_ull = int(input("按任意键后按回车继续"))
+            print("2秒后继续".center(70))
+            time.sleep(1)
+            show_playing_face()
+            print("1秒后继续".center(70))
+            time.sleep(1)
     
             poker_size = pokers0.index(adress[i])//4 + 1
             '''poker_size表示扑克牌的大小'''
-            if poker_size == 11:
+            if (poker_size == 11) and (i != 1):
                 numbers.append(poker_size)
                 player_pokers.extend(adress[1:i + 1])
                 del numbers[:]
@@ -98,15 +111,23 @@ def playing():
                 numbers.append(poker_size)
             
             show_playing_face()
-            n_ull = int(input("按任意键后按回车电脑开始放牌"))
+            print("1秒后电脑放牌".center(70))
+            time.sleep(1)
+            
             '''电脑回合'''
             i += 1
             adress[i] = computer_pokers.pop(0)
+            
             show_playing_face()
-            n_ull = int(input("按任意键后按回车继续"))
+            print("2秒后继续".center(70))
+            time.sleep(1)
+            show_playing_face()
+            print("1秒后继续".center(70))
+            time.sleep(1)
+            
             poker_size = pokers0.index(adress[i])//4 + 1
             '''poker_size表示扑克牌的大小'''
-            if poker_size == 11:
+            if (poker_size == 11) and (i != 1):
                 numbers.append(poker_size)
                 computer_pokers.extend(adress[1:i + 1])
                 del numbers[:]
@@ -132,7 +153,7 @@ def playing():
             show_playing_face()
         else:
             show_playing_face()
-            post = int(input("输入错误，请重新输入"))
+            post = int(input("输入错误，请重新输入".center(70).rstrip()))
 
 if __name__ == "__main__":
     adress0 = ["*******************************欢迎来玩小猫钓鱼*******************************\n\n", 
@@ -147,7 +168,7 @@ if __name__ == "__main__":
     player_pokers = pokers[:27]
     computer_pokers = pokers[-27:]
 
-    str1 = "请选择（0/1/2）".center(70)
+    str1 = "请选择（0/1/2）".center(70).rstrip()
     sign = True
     while True:
         if sign:
@@ -171,14 +192,17 @@ if __name__ == "__main__":
                 break
             else:
                 sign = False
-                str1 = "输入错误，请重新输入（0/1/2）".center(70)
+                str1 = "输入错误，请重新输入（0/1/2）".center(70).rstrip()
                 post = 2
         else:
-            str1 = "输入错误，请重新输入（0/1/2）".center(70)
+            str1 = "输入错误，请重新输入（0/1/2）".center(70).rstrip()
 
     if len(player_pokers) == 0:
         print("游戏结束，你输了".center(70))
+        time.sleep(3)
     elif len(computer_pokers) == 0:
         print("游戏结束，你赢了".center(70))
+        time.sleep(3)
     else:
         print(("游戏结束".center(70) + "\n\n") * 5)
+        time.sleep(3)
